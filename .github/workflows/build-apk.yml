@@ -33,6 +33,13 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
+          cache: true
+
+      # Verify Flutter installation
+      - name: Verify Flutter
+        run: |
+          flutter --version
+          which flutter
 
       # Get Flutter dependencies
       - name: Install dependencies

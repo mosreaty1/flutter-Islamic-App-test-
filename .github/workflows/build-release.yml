@@ -27,6 +27,12 @@ jobs:
         with:
           flutter-version: '3.24.0'
           channel: 'stable'
+          cache: true
+
+      - name: Verify Flutter
+        run: |
+          flutter --version
+          which flutter
 
       - name: Install dependencies
         run: flutter pub get
