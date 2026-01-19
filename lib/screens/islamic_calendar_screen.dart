@@ -303,7 +303,12 @@ class _IslamicCalendarScreenState extends State<IslamicCalendarScreen> {
   }
 
   Widget _buildEventItem(Map<String, dynamic> event) {
-    final monthName = HijriCalendar.fromDate(DateTime.now()).getMonthName(event['month']);
+    final monthNames = [
+      'Muharram', 'Safar', 'Rabi\' al-awwal', 'Rabi\' al-thani',
+      'Jumada al-awwal', 'Jumada al-thani', 'Rajab', 'Sha\'ban',
+      'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'
+    ];
+    final monthName = monthNames[event['month'] - 1];
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
