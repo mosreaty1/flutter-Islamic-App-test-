@@ -31,27 +31,37 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
           channel: 'stable'
           cache: true
 
-      # Verify Flutter installation
-      - name: Verify Flutter
+      # Clear any Dart cache that might interfere
+      - name: Clear Dart cache
+        run: |
+          flutter clean
+          rm -rf ~/.pub-cache
+
+      # Get Flutter dependencies with explicit Flutter command
+      - name: Install dependencies
         run: |
           flutter --version
-          which flutter
+          flutter pub get
+          flutter pub get --offline || true
 
-      # Get Flutter dependencies
-      - name: Install dependencies
-        run: flutter pub get
+      # Disable analytics
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
 
       # Run Flutter doctor
       - name: Run Flutter doctor
         run: flutter doctor -v
 
-      # Build APK
+      # Pre-download dependencies
+      - name: Pre-download Flutter dependencies
+        run: flutter precache --android
+
+      # Build APK with verbose output
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons --verbose
 
       # Upload APK as artifact
       - name: Upload APK
