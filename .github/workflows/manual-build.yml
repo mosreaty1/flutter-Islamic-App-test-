@@ -1,0 +1,56 @@
+name: Manual APK Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'claude/ramadan-quran-app-7OI18'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Disable automatic setup
+    env:
+      ACTIONS_RUNNER_DEBUG: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Download Flutter SDK manually
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 --branch stable $HOME/flutter
+          echo "$HOME/flutter/bin" >> $GITHUB_PATH
+          export PATH="$HOME/flutter/bin:$PATH"
+
+      - name: Flutter doctor
+        run: |
+          export PATH="$HOME/flutter/bin:$PATH"
+          flutter doctor -v
+
+      - name: Get packages
+        run: |
+          export PATH="$HOME/flutter/bin:$PATH"
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          export PATH="$HOME/flutter/bin:$PATH"
+          flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk

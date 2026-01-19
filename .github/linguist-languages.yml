@@ -1,0 +1,5 @@
+# Disable automatic language detection
+# This prevents GitHub from auto-running Dart setup
+overrides:
+  - "*.dart"
+  - "pubspec.yaml"
