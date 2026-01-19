@@ -59,9 +59,9 @@ jobs:
       - name: Pre-download Flutter dependencies
         run: flutter precache --android
 
-      # Build APK
+      # Build APK with verbose output
       - name: Build APK
-        run: flutter build apk --release --no-tree-shake-icons
+        run: flutter build apk --release --no-tree-shake-icons --verbose
 
       # Upload APK as artifact
       - name: Upload APK
