@@ -1,0 +1,81 @@
+name: Create Release APK
+
+# Trigger only when a tag is pushed (like v1.0.0)
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    name: Build and Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build universal APK
+        run: flutter build apk --release
+
+      - name: Build split APKs
+        run: flutter build apk --split-per-abi --release
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Ramadan Quran App ${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 📱 Ramadan Quran Kareem App
+
+            **What's Included:**
+            - 📖 Full Quran with translations
+            - ⏰ Prayer times
+            - 🌙 Ramadan calendar & tracker
+            - 📿 Tasbih counter
+            - 📚 Hadith collection
+            - 🤲 Dua collection
+            - 📅 Islamic calendar
+
+            **Download Options:**
+            - `app-release.apk` - Universal APK (works on all devices, ~45MB)
+            - `app-arm64-v8a-release.apk` - For newer phones (recommended, ~25MB)
+            - `app-armeabi-v7a-release.apk` - For older phones (~20MB)
+            - `app-x86_64-release.apk` - For emulators (~28MB)
+
+            **Installation:**
+            1. Download the APK for your device
+            2. Enable "Install from Unknown Sources" in Settings
+            3. Open the APK file and install
+
+            May Allah bless you! 🌙
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
