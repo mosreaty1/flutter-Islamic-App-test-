@@ -23,34 +23,34 @@ dependencies:
   path_provider: ^2.1.1
 
   # Prayer Times & Location
-  adhan: ^1.0.0
-  geolocator: ^10.0.0
-  geocoding: ^2.0.0
-  intl: ^0.18.0
+  adhan: ^2.0.0+1
+  geolocator: ^11.0.0
+  geocoding: ^3.0.0
+  intl: ^0.19.0
 
   # Quran & Islamic Content
-  quran: ^1.0.0
+  quran: ^1.4.0
   hijri: ^3.0.0
 
   # Audio Player
-  just_audio: ^0.9.0
-  audio_session: ^0.1.0
+  just_audio: ^0.9.36
+  audio_session: ^0.1.18
 
   # Notifications
-  flutter_local_notifications: ^16.0.0
-  timezone: ^0.9.0
+  flutter_local_notifications: ^17.0.0
+  timezone: ^0.9.2
 
   # Sensors (for Qibla)
-  flutter_compass: ^0.7.0
-  sensors_plus: ^4.0.0
+  flutter_compass: ^0.8.0
+  sensors_plus: ^5.0.0
 
   # HTTP & Network
-  http: ^1.0.0
-  dio: ^5.0.0
+  http: ^1.2.0
+  dio: ^5.4.0
 
   # Other utilities
-  flutter_svg: ^2.0.0
-  url_launcher: ^6.0.0
+  flutter_svg: ^2.0.10
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   flutter_test:
