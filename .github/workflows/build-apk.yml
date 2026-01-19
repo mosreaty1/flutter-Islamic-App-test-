@@ -35,23 +35,34 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # Verify Flutter installation
-      - name: Verify Flutter
+      # Clear any Dart cache that might interfere
+      - name: Clear Dart cache
+        run: |
+          flutter clean
+          rm -rf ~/.pub-cache
+
+      # Get Flutter dependencies with explicit Flutter command
+      - name: Install dependencies
         run: |
           flutter --version
-          which flutter
+          flutter pub get
+          flutter pub get --offline || true
 
-      # Get Flutter dependencies
-      - name: Install dependencies
-        run: flutter pub get
+      # Disable analytics
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
 
       # Run Flutter doctor
       - name: Run Flutter doctor
         run: flutter doctor -v
 
+      # Pre-download dependencies
+      - name: Pre-download Flutter dependencies
+        run: flutter precache --android
+
       # Build APK
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       # Upload APK as artifact
       - name: Upload APK
